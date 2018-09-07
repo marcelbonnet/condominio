@@ -5,7 +5,8 @@
 #include <QDate>
 
 
-class Despesa{
+class Despesa
+{
 private:
     int id;
     QDate dataDespesa;
@@ -16,7 +17,7 @@ private:
 
 
 public:
-    Despesa();
+    Despesa() {}
 
     void setId(int id){
         this->id = id;

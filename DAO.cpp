@@ -41,6 +41,7 @@ int DAO::incluirDespesa(Despesa d) throw (std::exception){
     SQLite::Database db(getDbPath().toUtf8().data(), SQLite::OPEN_READWRITE );
     SQLite::Statement   query(db, sql);
 
+    //testar se não tiver nota
     d.setDataInclusao(QDate());
     QFile nota(d.getNota());
 

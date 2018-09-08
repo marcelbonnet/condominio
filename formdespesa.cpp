@@ -10,6 +10,7 @@ FormDespesa::FormDespesa(QWidget *parent) :
     ui(new Ui::FormDespesa)
 {
     ui->setupUi(this);
+    ui->data->setDate(QDate().currentDate());
 
 }
 

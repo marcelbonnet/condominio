@@ -27,7 +27,8 @@ SOURCES += \
         mainwindow.cpp \
     formunidade.cpp \
     DAO.cpp \
-    formdespesa.cpp
+    formdespesa.cpp \
+    formnaturezadespesa.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -35,12 +36,15 @@ HEADERS += \
     DAO.h \
     entidade/unidade.h \
     entidade/despesa.h \
-    formdespesa.h
+    formdespesa.h \
+    formnaturezadespesa.h \
+    entidade/naturezadespesa.h
 
 FORMS += \
         mainwindow.ui \
     formunidade.ui \
-    formdespesa.ui
+    formdespesa.ui \
+    formnaturezadespesa.ui
 
 QMAKE_LIBS += -lsqlite3 -L/home/marcelbonnet/devel/cpp/SQLiteCpp-master/build -lSQLiteCpp
 

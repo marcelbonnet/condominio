@@ -4,6 +4,7 @@
 #include <QDebug>
 #include "formunidade.h"
 #include "formdespesa.h"
+#include "formnaturezadespesa.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -14,10 +15,11 @@ MainWindow::MainWindow(QWidget *parent) :
 
     FormUnidade* frmUnidade = new FormUnidade();
     FormDespesa* frmDespesa = new FormDespesa();
+    FormNaturezaDespesa* frmNaturezaDespesa = new FormNaturezaDespesa();
 
     ui->tabWidget->addTab(frmUnidade, "Unidade");
     ui->tabWidget->addTab(frmDespesa, "Despesa");
-
+    ui->tabWidget->addTab(frmNaturezaDespesa, "Natureza Despesa");
 }
 
 MainWindow::~MainWindow()

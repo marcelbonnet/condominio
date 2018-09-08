@@ -1,5 +1,6 @@
 #include "DAO.h"
 #include <QFile>
+#include <QDebug>
 
 DAO::DAO()
 {
@@ -66,7 +67,7 @@ QList<Unidade> DAO::listarUnidades() throw (std::exception){
     QList<Unidade> rs;
     while (query.executeStep())
     {
-        const int id = query.getColumn(0);
+        int id = query.getColumn(0);
         const char* numero   = query.getColumn(1);
         const char* nome   = query.getColumn(2);
         const char* email = query.getColumn(3);
@@ -80,6 +81,46 @@ QList<Unidade> DAO::listarUnidades() throw (std::exception){
         u.setTelefone(telefone);
 
         rs.append(u);
+    }
+    return rs;
+}
+
+int DAO::incluirNaturezaDespesa(NaturezaDespesa nd) throw (std::exception){
+    const char* sql = "INSERT INTO natureza_despesas (natureza) VALUES (?)";
+    SQLite::Database db(getDbPath().toUtf8().data(), SQLite::OPEN_READWRITE );
+    SQLite::Statement   query(db, sql);
+
+    query.bind(1, nd.getNatureza().toUtf8().data());
+    query.exec();
+
+    return DAO::getLastInsertRowId();
+}
+
+void DAO::updateNaturezaDespesa(NaturezaDespesa nd) throw (std::exception){
+    const char* sql = "UPDATE natureza_despesas SET natureza=? WHERE id = ?";
+    SQLite::Database db(getDbPath().toUtf8().data(), SQLite::OPEN_READWRITE );
+    SQLite::Statement   query(db, sql);
+
+    query.bind(1, nd.getNatureza().toUtf8().data());
+    query.bind(2, nd.getId());
+    query.exec();
+
+}
+
+QList<NaturezaDespesa> DAO::listarNaturezaDespesas() throw (std::exception){
+    SQLite::Database db(getDbPath().toUtf8().data());
+    SQLite::Statement   query(db, "SELECT id, natureza FROM natureza_despesas ORDER BY natureza ASC");
+    QList<NaturezaDespesa> rs;
+    while (query.executeStep())
+    {
+        int id = query.getColumn(0);
+        const char* natureza   = query.getColumn(1);
+
+        NaturezaDespesa nd;
+        nd.setId(id);
+        nd.setNatureza(QString(natureza));
+
+        rs.append(nd);
     }
     return rs;
 }

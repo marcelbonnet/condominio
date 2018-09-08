@@ -14,7 +14,8 @@ private:
     int valor;
     QString memo;
     QString nota;
-
+    int natureza;
+    int grupo;
 
 public:
     Despesa() {}
@@ -60,6 +61,21 @@ public:
 
     QString getNota(){
         return this->nota;
+    }
+
+    void setNatureza(int natureza){
+            this->natureza = natureza;
+    }
+
+    int getNatureza(){
+            return this->natureza;
+    }
+    void setGrupo(int grupo){
+            this->grupo = grupo;
+    }
+
+    int getGrupo(){
+            return this->grupo;
     }
 
 };

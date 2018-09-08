@@ -5,6 +5,7 @@
 #include <QMap>
 #include "entidade/unidade.h"
 #include "entidade/despesa.h"
+#include "entidade/naturezadespesa.h"
 #include <QMap>
 #include <QList>
 
@@ -18,6 +19,10 @@ public:
     static int incluirUnidade(Unidade u) throw (std::exception);
     static int incluirDespesa(Despesa d) throw (std::exception);
     static QList<Unidade> listarUnidades() throw (std::exception);
+
+    static int incluirNaturezaDespesa(NaturezaDespesa nd) throw (std::exception);
+    static void updateNaturezaDespesa(NaturezaDespesa nd) throw (std::exception);
+    static QList<NaturezaDespesa> listarNaturezaDespesas() throw (std::exception);
 
 };
 

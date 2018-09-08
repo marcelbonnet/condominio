@@ -35,7 +35,7 @@ void FormUnidade::atualizarTabela(){
 
         for(int i=0; i<lista.count(); i++){
             Unidade u = lista.at(i);
-            table->setItem(i,0, new QTableWidgetItem(u.getId()));
+            table->setItem(i,0, new QTableWidgetItem( QString::number(u.getId()) ));
             table->setItem(i,1, new QTableWidgetItem(u.getNumero()));
             table->setItem(i,2, new QTableWidgetItem(u.getNome()));
             table->setItem(i,3, new QTableWidgetItem(u.getEmail()));

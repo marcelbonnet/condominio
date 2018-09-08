@@ -9,6 +9,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
+    MainWindow::showMaximized();
     ui->setupUi(this);
 
     FormUnidade* frmUnidade = new FormUnidade();

@@ -59,3 +59,27 @@ int DAO::incluirDespesa(Despesa d) throw (std::exception){
 
     return DAO::getLastInsertRowId();
 }
+
+QList<Unidade> DAO::listarUnidades() throw (std::exception){
+    SQLite::Database db(getDbPath().toUtf8().data());
+    SQLite::Statement   query(db, "SELECT id, numero, resp_financeiro, resp_financeiro_email, resp_financeiro_telefone FROM unidades  ORDER BY numero ASC");
+    QList<Unidade> rs;
+    while (query.executeStep())
+    {
+        const int id = query.getColumn(0);
+        const char* numero   = query.getColumn(1);
+        const char* nome   = query.getColumn(2);
+        const char* email = query.getColumn(3);
+        const char* telefone = query.getColumn(4);
+
+        Unidade u;
+        u.setId(id);
+        u.setEmail(QString(email));
+        u.setNome(QString(nome));
+        u.setNumero(QString(numero));
+        u.setTelefone(telefone);
+
+        rs.append(u);
+    }
+    return rs;
+}

@@ -17,9 +17,10 @@ public:
 
 private slots:
     void on_pushButton_clicked();
-
 private:
     Ui::FormUnidade *ui;
+
+    void atualizarTabela();
 };
 
 #endif // FORMUNIDADE_H

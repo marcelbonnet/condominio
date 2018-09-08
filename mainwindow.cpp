@@ -2,7 +2,8 @@
 #include "ui_mainwindow.h"
 
 #include <QDebug>
-#include "entidade/unidade.h"
+#include "formunidade.h"
+#include "formdespesa.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -10,9 +11,12 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    Unidade u = Unidade();
-    u.setNumero("22");
-    qDebug() << u.getNumero();
+    FormUnidade* frmUnidade = new FormUnidade();
+    FormDespesa* frmDespesa = new FormDespesa();
+
+    ui->tabWidget->addTab(frmUnidade, "Unidade");
+    ui->tabWidget->addTab(frmDespesa, "Despesa");
+
 }
 
 MainWindow::~MainWindow()

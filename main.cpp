@@ -11,8 +11,8 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
     MainWindow w;
 
-    //w.show();
-
+    w.show();
+/*
     Unidade u;
     u.setId(2342);
 
@@ -24,6 +24,6 @@ int main(int argc, char *argv[])
 
     FormDespesa* fd = new FormDespesa();
     fd->show();
-
+*/
     return a.exec();
 }

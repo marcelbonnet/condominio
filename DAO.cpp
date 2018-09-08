@@ -38,24 +38,28 @@ int DAO::incluirUnidade(Unidade u) throw (std::exception){
 }
 
 int DAO::incluirDespesa(Despesa d) throw (std::exception){
-    const char* sql = "INSERT INTO despesas (dt_evento, valor, memo, dt_inclusao, nota) VALUES (?, ?, ?, ?, ?)";
+    const char* sql = "INSERT INTO despesas (dt_evento, valor, memo, dt_inclusao, nota, fkNatureza) VALUES (?, ?, ?, ?, ?, ?)";
     SQLite::Database db(getDbPath().toUtf8().data(), SQLite::OPEN_READWRITE );
     SQLite::Statement   query(db, sql);
 
-    //testar se não tiver nota
-    d.setDataInclusao(QDate());
+
+    d.setDataInclusao(QDate().currentDate());
     QFile nota(d.getNota());
 
-    if(!nota.open(QIODevice::ReadOnly))
-        throw new std::exception();
+    char* data = NULL;
+    if(!d.getNota().isEmpty()){
+        if(!nota.open(QIODevice::ReadOnly))
+            throw new std::exception();
 
-    char* data = nota.readAll().data();
+        data = nota.readAll().data();
+    }
 
     query.bind(1, d.getDataDespesa().toString("yyyy-MM-dd").toUtf8().data() );
     query.bind(2, d.getValor());
     query.bind(3, d.getMemo().toUtf8().data());
     query.bind(4, d.getDataInclusao().toString("yyyy-MM-dd").toUtf8().data());
     query.bind(5, data, nota.size());
+    query.bind(6, d.getNatureza());
     query.exec();
 
     return DAO::getLastInsertRowId();

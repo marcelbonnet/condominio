@@ -16,14 +16,14 @@
   <widget class="QLabel" name="label_2">
    <property name="geometry">
     <rect>
-     <x>10</x>
-     <y>60</y>
+     <x>380</x>
+     <y>10</y>
      <width>75</width>
      <height>23</height>
     </rect>
    </property>
    <property name="text">
-    <string>BRL</string>
+    <string>Valor</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_3">
@@ -42,7 +42,7 @@
   <widget class="QDateEdit" name="data">
    <property name="geometry">
     <rect>
-     <x>160</x>
+     <x>100</x>
      <y>0</y>
      <width>110</width>
      <height>31</height>
@@ -54,20 +54,20 @@
     <rect>
      <x>10</x>
      <y>10</y>
-     <width>141</width>
+     <width>71</width>
      <height>23</height>
     </rect>
    </property>
    <property name="text">
-    <string>Data da Despesa</string>
+    <string>Data</string>
    </property>
   </widget>
   <widget class="QPlainTextEdit" name="memo">
    <property name="geometry">
     <rect>
-     <x>160</x>
+     <x>100</x>
      <y>100</y>
-     <width>461</width>
+     <width>521</width>
      <height>71</height>
     </rect>
    </property>
@@ -140,9 +140,35 @@
   <widget class="QDoubleSpinBox" name="valor">
    <property name="geometry">
     <rect>
-     <x>160</x>
-     <y>50</y>
+     <x>510</x>
+     <y>0</y>
      <width>111</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="maximum">
+    <double>99999.990000000005239</double>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_4">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>50</y>
+     <width>75</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Natureza</string>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="cmbNatureza">
+   <property name="geometry">
+    <rect>
+     <x>100</x>
+     <y>50</y>
+     <width>271</width>
      <height>31</height>
     </rect>
    </property>

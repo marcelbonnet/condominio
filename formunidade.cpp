@@ -41,6 +41,7 @@ void FormUnidade::atualizarTabela(){
             table->setItem(i,3, new QTableWidgetItem(u.getEmail()));
             table->setItem(i,4, new QTableWidgetItem(u.getTelefone()));
         }
+        table->resizeColumnsToContents();
     } catch (std::exception &e) {
         QMessageBox::warning(this, "Erro", e.what() );
     }

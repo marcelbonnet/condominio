@@ -19,6 +19,8 @@ public:
 private slots:
     void onNaturezaChanged(QTableWidgetItem * item);
 
+    void on_btnIncluirNatureza_clicked();
+
 private:
     Ui::FormNaturezaDespesa *ui;
 

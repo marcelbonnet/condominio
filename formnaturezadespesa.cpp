@@ -39,6 +39,7 @@ void FormNaturezaDespesa::atualizarTabela(){
             table->setItem(i,0, new QTableWidgetItem( QString::number(nd.getId()) ));
             table->setItem(i,1, new QTableWidgetItem(nd.getNatureza()) );
         }
+        table->resizeColumnsToContents();
         connect( ui->table, SIGNAL( itemChanged (QTableWidgetItem *) ), this, SLOT( onNaturezaChanged(QTableWidgetItem*)) ) ;
     } catch (std::exception &e) {
         QMessageBox::warning(this, "Erro", e.what() );
@@ -53,8 +54,6 @@ void FormNaturezaDespesa::onNaturezaChanged(QTableWidgetItem *item)
         QTableWidgetItem* itemId = table->item(row, 0);
         QTableWidgetItem* itemNatureza = table->item(row, 1);
 
-        qDebug() << itemId->text() << itemNatureza->text() << item->text();
-
         NaturezaDespesa nd;
         nd.setId(itemId->text().toInt());
         nd.setNatureza(item->text());
@@ -66,4 +65,20 @@ void FormNaturezaDespesa::onNaturezaChanged(QTableWidgetItem *item)
         }
 
         atualizarTabela();
+}
+
+void FormNaturezaDespesa::on_btnIncluirNatureza_clicked()
+{
+    NaturezaDespesa nd;
+    nd.setNatureza(ui->natureza->text());
+
+    try{
+        DAO::incluirNaturezaDespesa(nd);
+        ui->natureza->setText("");
+    } catch (std::exception &e) {
+        QMessageBox::warning(this, "Erro", e.what() );
+    }
+
+    atualizarTabela();
+
 }

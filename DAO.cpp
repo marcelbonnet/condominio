@@ -101,30 +101,82 @@ int DAO::incluirNaturezaDespesa(NaturezaDespesa nd) throw (std::exception){
 }
 
 void DAO::updateNaturezaDespesa(NaturezaDespesa nd) throw (std::exception){
-    const char* sql = "UPDATE natureza_despesas SET natureza=? WHERE id = ?";
     SQLite::Database db(getDbPath().toUtf8().data(), SQLite::OPEN_READWRITE );
-    SQLite::Statement   query(db, sql);
 
-    query.bind(1, nd.getNatureza().toUtf8().data());
-    query.bind(2, nd.getId());
-    query.exec();
+    if( ! nd.getNatureza().isEmpty() ){
+        const char* sql = "UPDATE natureza_despesas SET natureza=? WHERE id = ?";
+        SQLite::Statement   query(db, sql);
+        query.bind(1, nd.getNatureza().toUtf8().data());
+        query.bind(2, nd.getId());
+        query.exec();
+    }
+
+    if( nd.getGrupo() > 0 ){
+        const char* sql = "UPDATE natureza_despesas SET fkGrupo=? WHERE id = ?";
+        SQLite::Statement   query(db, sql);
+        query.bind(1, nd.getGrupo());
+        query.bind(2, nd.getId());
+        query.exec();
+    }
 
 }
 
 QList<NaturezaDespesa> DAO::listarNaturezaDespesas() throw (std::exception){
     SQLite::Database db(getDbPath().toUtf8().data());
-    SQLite::Statement   query(db, "SELECT id, natureza FROM natureza_despesas ORDER BY natureza ASC");
+    SQLite::Statement   query(db, "SELECT id, natureza, fkGrupo FROM natureza_despesas ORDER BY natureza ASC");
     QList<NaturezaDespesa> rs;
     while (query.executeStep())
     {
         int id = query.getColumn(0);
         const char* natureza   = query.getColumn(1);
+        int fkGrupo = query.getColumn(2);
 
         NaturezaDespesa nd;
         nd.setId(id);
         nd.setNatureza(QString(natureza));
+        nd.setGrupo(fkGrupo);
 
         rs.append(nd);
+    }
+    return rs;
+}
+
+
+int DAO::incluirGrupoDespesa(GrupoDespesa gd) throw (std::exception){
+    const char* sql = "INSERT INTO grupo_despesas (grupo) VALUES (?)";
+    SQLite::Database db(getDbPath().toUtf8().data(), SQLite::OPEN_READWRITE );
+    SQLite::Statement   query(db, sql);
+
+    query.bind(1, gd.getGrupo().toUtf8().data());
+    query.exec();
+
+    return DAO::getLastInsertRowId();
+}
+
+void DAO::updateGrupoDespesa(GrupoDespesa gd) throw (std::exception){
+    const char* sql = "UPDATE grupo_despesas SET grupo=? WHERE id = ?";
+    SQLite::Database db(getDbPath().toUtf8().data(), SQLite::OPEN_READWRITE );
+    SQLite::Statement   query(db, sql);
+
+    query.bind(1, gd.getGrupo().toUtf8().data());
+    query.bind(2, gd.getId());
+    query.exec();
+}
+
+QList<GrupoDespesa> DAO::listarGrupoDespesas() throw (std::exception){
+    SQLite::Database db(getDbPath().toUtf8().data());
+    SQLite::Statement   query(db, "SELECT id, grupo FROM grupo_despesas ORDER BY grupo ASC");
+    QList<GrupoDespesa> rs;
+    while (query.executeStep())
+    {
+        int id = query.getColumn(0);
+        const char* grupo   = query.getColumn(1);
+
+        GrupoDespesa gd;
+        gd.setId(id);
+        gd.setGrupo(QString(grupo));
+
+        rs.append(gd);
     }
     return rs;
 }

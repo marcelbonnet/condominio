@@ -8,6 +8,7 @@ class NaturezaDespesa
 private:
     int id;
     QString natureza;
+    int grupo = 0;
 public:
     NaturezaDespesa() {}
 
@@ -24,6 +25,14 @@ public:
 
     QString getNatureza(){
             return this->natureza;
+    }
+
+    void setGrupo(int grupo){
+            this->grupo = grupo;
+    }
+
+    int getGrupo(){
+            return this->grupo;
     }
 };
 

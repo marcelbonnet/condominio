@@ -6,6 +6,7 @@
 #include "formdespesa.h"
 #include "formnaturezadespesa.h"
 #include "formgrupodespesa.h"
+#include "formrateio.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -18,11 +19,13 @@ MainWindow::MainWindow(QWidget *parent) :
     FormDespesa* frmDespesa = new FormDespesa();
     FormNaturezaDespesa* frmNaturezaDespesa = new FormNaturezaDespesa();
     FormGrupoDespesa* frmGrupoDespesa = new FormGrupoDespesa();
+    FormRateio* frmRateio = new FormRateio();
 
     ui->tabWidget->addTab(frmUnidade, "Unidade");
     ui->tabWidget->addTab(frmDespesa, "Despesa");
     ui->tabWidget->addTab(frmNaturezaDespesa, "Natureza Despesa");
     ui->tabWidget->addTab(frmGrupoDespesa, "Grupo Despesa");
+    ui->tabWidget->addTab(frmRateio, "Rateio");
 }
 
 MainWindow::~MainWindow()

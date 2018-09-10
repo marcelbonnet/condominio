@@ -1,21 +1,4 @@
-PRAGMA foreign_keys=OFF;
-BEGIN TRANSACTION;
-CREATE TABLE IF NOT EXISTS "unidades" (
-	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-	`numero`	TEXT NOT NULL UNIQUE,
-	`resp_financeiro`	TEXT NOT NULL,
-	`resp_financeiro_email`	TEXT NOT NULL,
-	`resp_financeiro_telefone`	INTEGER
-);
-CREATE TABLE IF NOT EXISTS "rateios" (
-	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-	`fk_unidade`	INTEGER NOT NULL,
-	`valor`	INTEGER NOT NULL,
-	`parcela`	INTEGER NOT NULL,
-	`dt_vcto`	DATE NOT NULL,
-	`razao`	NUMERIC NOT NULL,
-	FOREIGN KEY(`fk_unidade`) REFERENCES `unidades`(`id`)
-);
+CREATE TABLE sqlite_sequence(name,seq);
 CREATE TABLE `descontos` (
 	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 	`valor`	INTEGER NOT NULL,
@@ -24,14 +7,6 @@ CREATE TABLE `descontos` (
 	`fk_despesa`	INTEGER NOT NULL,
 	FOREIGN KEY(`fk_unidade`) REFERENCES unidades('id'),
 	FOREIGN KEY(`fk_despesa`) REFERENCES despesas('id')
-);
-CREATE TABLE IF NOT EXISTS "despesas" (
-	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-	`dt_evento`	DATE NOT NULL,
-	`valor`	INTEGER NOT NULL,
-	`memo`	TEXT NOT NULL,
-	`dt_inclusao`	DATE NOT NULL,
-	`nota`	BLOB
 );
 CREATE TABLE `livro_ocorrencias` (
 	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
@@ -64,10 +39,43 @@ CREATE TABLE IF NOT EXISTS "cobrancas" (
 	`fk_unidade`	INTEGER NOT NULL,
 	FOREIGN KEY(`fk_unidade`) REFERENCES `unidades`(`id`)
 );
-DELETE FROM sqlite_sequence;
-INSERT INTO sqlite_sequence VALUES('unidades',6);
-INSERT INTO sqlite_sequence VALUES('rateios',0);
-INSERT INTO sqlite_sequence VALUES('despesas',0);
-INSERT INTO sqlite_sequence VALUES('assinaturas',0);
-INSERT INTO sqlite_sequence VALUES('cobrancas',0);
-COMMIT;
+CREATE TABLE IF NOT EXISTS "unidades" (
+	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+	`numero`	TEXT NOT NULL UNIQUE,
+	`resp_financeiro`	TEXT NOT NULL,
+	`resp_financeiro_email`	TEXT NOT NULL,
+	`resp_financeiro_telefone`	TEXT
+);
+CREATE TABLE IF NOT EXISTS "grupo_despesas" (
+	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+	`grupo`	TEXT NOT NULL UNIQUE
+);
+CREATE TABLE IF NOT EXISTS "despesas" (
+	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+	`dt_evento`	DATE NOT NULL,
+	`valor`	INTEGER NOT NULL,
+	`memo`	TEXT NOT NULL,
+	`dt_inclusao`	DATE NOT NULL,
+	`nota`	BLOB,
+	`fkNatureza`	INTEGER NOT NULL,
+	`fkGrupo`	INTEGER,
+	FOREIGN KEY(`fkNatureza`) REFERENCES `natureza_despesas`(`id`),
+	FOREIGN KEY(`fkGrupo`) REFERENCES `grupo_despesas`(`id`)
+);
+CREATE TABLE IF NOT EXISTS "natureza_despesas" (
+	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+	`natureza`	TEXT NOT NULL UNIQUE,
+	`fkGrupo`	INTEGER,
+	FOREIGN KEY(`fkGrupo`) REFERENCES `grupo_despesas`(`id`)
+);
+CREATE TABLE IF NOT EXISTS "rateios" (
+	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+	`fk_unidade`	INTEGER NOT NULL,
+	`valor`	INTEGER NOT NULL,
+	`parcela`	INTEGER NOT NULL,
+	`dt_vcto`	DATE NOT NULL,
+	`razao`	NUMERIC NOT NULL,
+	`fkDespesa`	INTEGER NOT NULL,
+	FOREIGN KEY(`fk_unidade`) REFERENCES `unidades`(`id`),
+	FOREIGN KEY(`fkDespesa`) REFERENCES `despesas`(`id`)
+);

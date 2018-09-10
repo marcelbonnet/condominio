@@ -89,6 +89,37 @@ QList<Unidade> DAO::listarUnidades() throw (std::exception){
     return rs;
 }
 
+QList<Despesa> DAO::listarDespesasPeriodo(QDate de, QDate ate) throw (std::exception){
+    SQLite::Database db(getDbPath().toUtf8().data());
+    SQLite::Statement   query(db, "SELECT id, dt_evento, valor, memo, dt_inclusao, fkNatureza, fkGrupo FROM despesas WHERE dt_evento >= ? AND dt_evento <= ? ORDER BY dt_evento, valor ASC");
+    QList<Despesa> rs;
+
+    query.bind(1, de.toString("yyyy-MM-dd").toUtf8().data());
+    query.bind(2, ate.toString("yyyy-MM-dd").toUtf8().data());
+
+    while (query.executeStep())
+    {
+        int id                  = query.getColumn(0);
+        const char* dt_evento   = query.getColumn(1);
+        int valor               = query.getColumn(2);
+        const char* memo        = query.getColumn(3);
+        const char* dt_inclusao = query.getColumn(4);
+        int natureza            = query.getColumn(5);
+        int grupo               = query.getColumn(6);
+
+        Despesa d;
+        d.setId(id);
+        d.setDataDespesa(QDate().fromString(dt_evento,"yyyy-MM-dd") );
+        d.setValor(valor);
+        d.setMemo(memo);
+        d.setDataInclusao(QDate().fromString(dt_inclusao,"yyyy-MM-dd"));
+        d.setNatureza(natureza);
+        d.setGrupo(grupo);
+        rs.append(d);
+    }
+    return rs;
+}
+
 int DAO::incluirNaturezaDespesa(NaturezaDespesa nd) throw (std::exception){
     const char* sql = "INSERT INTO natureza_despesas (natureza) VALUES (?)";
     SQLite::Database db(getDbPath().toUtf8().data(), SQLite::OPEN_READWRITE );
@@ -177,6 +208,68 @@ QList<GrupoDespesa> DAO::listarGrupoDespesas() throw (std::exception){
         gd.setGrupo(QString(grupo));
 
         rs.append(gd);
+    }
+    return rs;
+}
+
+
+int DAO::incluirRateio(Rateio rateio) throw (std::exception){
+    const char* sql = "INSERT INTO rateios (fk_unidade, parcela, valor, dt_vcto, razao) VALUES (?, ?, ?, ?, ?)";
+    SQLite::Database db(getDbPath().toUtf8().data(), SQLite::OPEN_READWRITE );
+    SQLite::Statement   query(db, sql);
+
+    query.bind(1, rateio.getUnidade());
+    query.bind(2, rateio.getParcela());
+    query.bind(3, rateio.getValor());
+    query.bind(4, rateio.getDataVencimento().toString("yyyy-MM-dd").toUtf8().data());
+    query.bind(5, rateio.getRazao());
+    query.exec();
+
+    return DAO::getLastInsertRowId();
+}
+
+void DAO::updateRateio(Rateio rateio) throw (std::exception){
+    SQLite::Database db(getDbPath().toUtf8().data(), SQLite::OPEN_READWRITE );
+
+    if( ! rateio.getUnidade() > -1 ){
+        const char* sql = "UPDATE rateios SET fk_unidade=? WHERE id = ?";
+        SQLite::Statement   query(db, sql);
+        query.bind(1, rateio.getUnidade());
+        query.bind(2, rateio.getId());
+        query.exec();
+    }
+
+    if( rateio.getValor() > -1 ){
+        const char* sql = "UPDATE rateios SET valor=? WHERE id = ?";
+        SQLite::Statement   query(db, sql);
+        query.bind(1, rateio.getValor());
+        query.bind(2, rateio.getId());
+        query.exec();
+    }
+}
+
+QList<Rateio> DAO::listarRateio() throw (std::exception){
+    SQLite::Database db(getDbPath().toUtf8().data());
+    SQLite::Statement   query(db, "SELECT id, fk_unidade, parcela, valor, dt_vcto, razao, fkDespesa ORDER BY grupo ASC");
+    QList<Rateio> rs;
+    while (query.executeStep())
+    {
+        int id          = query.getColumn(0);
+        int unidade     = query.getColumn(1);
+        int parcela     = query.getColumn(2);
+        int valor       = query.getColumn(3);
+        const char* vcto= query.getColumn(4);
+        double razao    = query.getColumn(5);
+        int despesaId   = query.getColumn(6);
+
+        Rateio rateio;
+        rateio.setId(id);
+        rateio.setUnidade(unidade);
+        rateio.setParcela(parcela);
+        rateio.setValor(valor);
+        rateio.setDataVencimento(QDate().fromString(vcto, "yyyy-MM-dd") );
+        rateio.setDespesa(despesaId);
+        rs.append(rateio);
     }
     return rs;
 }

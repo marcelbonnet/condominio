@@ -297,26 +297,27 @@ QList<Rateio> DAO::listarRateio() throw (std::exception){
 
 QList<Rateio> DAO::listarRateioPorDespesa(int despesaId) throw (std::exception){
     SQLite::Database db(getDbPath().toUtf8().data());
-    SQLite::Statement   query(db, "SELECT rateioId, fk_unidade, parcela, valor, dt_vcto, razao, fkDespesa, unidadeId, numero FROM view_rateios WHERE fkDespesa = ? OR fkDespesa IS NULL ORDER BY unidadeId,dt_vcto ASC");
+    SQLite::Statement   query(db, "SELECT u.id AS unidadeId, u.numero, r.id AS rateioId, r.fk_unidade, r.parcela, r.razao, r.valor, r.fkDespesa, r.dt_vcto FROM unidades u LEFT OUTER JOIN rateios r ON u.id = r.fk_unidade AND (fkDespesa = ? OR fkDespesa IS NULL)");
     query.bind(1, despesaId);
     QList<Rateio> rs;
     while (query.executeStep())
     {
-        int id          = query.getColumn(0);
-        int unidade     = query.getColumn(1);
-        int parcela     = query.getColumn(2);
-        int valor       = query.getColumn(3);
-        const char* vcto= query.getColumn(4);
+        int unidadeId       = query.getColumn(0);
+        const char* unidadeNumero= query.getColumn(1);
+        int unidade     = query.getColumn(3);
+        int rateioId          = query.getColumn(2);
+        int parcela     = query.getColumn(4);
         double razao    = query.getColumn(5);
-        int despesaId   = query.getColumn(6);
-        int unidadeId       = query.getColumn(7);
-        const char* unidadeNumero= query.getColumn(8);
+        int valor       = query.getColumn(6);
+        const char* vcto= query.getColumn(8);
+        int despesaId   = query.getColumn(7);
 
         Rateio rateio;
-        rateio.setId(id);
+        rateio.setId(rateioId);
         rateio.setUnidade(unidade);
         rateio.setParcela(parcela);
         rateio.setValor(valor);
+        rateio.setRazao((float)razao);
         rateio.setDataVencimento(QDate().fromString(vcto, "yyyy-MM-dd") );
         rateio.setDespesa(despesaId);
         rateio.unidadeId = unidadeId;

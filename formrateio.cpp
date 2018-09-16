@@ -91,13 +91,14 @@ void FormRateio::atualizarRateios(){
         for(int i=0; i<lista.count(); i++){
             Rateio rateio = lista.at(i);
 
+            qDebug() << rateio.getId() << rateio.getUnidade() << rateio.getParcela() << rateio.getRazao() << rateio.getValor();
+
             int valor = despesaValor;
             if(rateio.getValor() > -1)
                 valor = rateio.getValor();
 
             int parcelas = 1;
-            if(rateio.getParcela() > -1)
-                parcelas = rateio.getParcela();
+
 
             int grupo = tableDespesas->item(tableDespesas->currentRow(), 7)->text().toInt();
             /*
@@ -108,32 +109,35 @@ void FormRateio::atualizarRateios(){
              * */
             float cota = (float)1/8;
 
-            if(rateio.getRazao() > -1)
-                cota = rateio.getRazao();
+
 
             table->setItem(i,0, new QTableWidgetItem( QString::number(rateio.unidadeId) ));
             table->setItem(i,1, new QTableWidgetItem(rateio.unidadeNumero ) );
             table->setItem(i,2, new QTableWidgetItem( QString::number(rateio.getId()) ));
             table->setItem(i,3, new QTableWidgetItem(QString::number(valor) ) );
-            table->setItem(i,4, new QTableWidgetItem(QString::number(parcelas) ) );
-            table->setItem(i,5, new QTableWidgetItem( QString::number(cota) ));
+//            table->setItem(i,4, new QTableWidgetItem(QString::number(parcelas) ) );
+//            table->setItem(i,5, new QTableWidgetItem( QString::number(cota) ));
             table->setItem(i,6, new QTableWidgetItem(rateio.getDataVencimento().toString("dd/MM/yyyy") ) );
             table->setItem(i,7, new QTableWidgetItem( QString::number(despesaId) ));
 
             if(grupo == 3){
                 cota = (float)1/7;
-                int parcelas = 1;
-                float cotaAplicada = cota;
+
+                float cotaAplicada = (float)cota;
 
                 //FIXME : síndico deve ser registrado numa tabela de configurações
                 if(rateio.unidadeNumero.compare("22") == 0){
                     parcelas = 0;
                     cotaAplicada = 0;
 
+                } else {
+                    if(rateio.getParcela() > -1)
+                        parcelas = rateio.getParcela();
+                    if(rateio.getRazao() > -1)
+                        cotaAplicada = rateio.getRazao();
                 }
 
-                if(rateio.getRazao() > -1)
-                    cotaAplicada = rateio.getRazao();
+
 
                 table->setItem(i,4, new QTableWidgetItem( QString::number(parcelas) ));
                 table->setItem(i,5, new QTableWidgetItem( QString::number(cotaAplicada) ));
@@ -141,7 +145,7 @@ void FormRateio::atualizarRateios(){
 
             if(grupo == 2){
                 cota = 0;
-                int parcelas = 0;
+
                 float cotaAplicada = cota;
 
                 //FIXME : registrar numa tabela de configurações
@@ -150,7 +154,9 @@ void FormRateio::atualizarRateios(){
                         || rateio.unidadeNumero.compare("32") == 0
                         || rateio.unidadeNumero.compare("42") == 0
                 ){
-                    parcelas = 1;
+                    if(rateio.getParcela() > -1)
+                        parcelas = rateio.getParcela();
+
                     cotaAplicada = (float)1/4;
 
                 }
@@ -173,9 +179,10 @@ void FormRateio::atualizarRateios(){
 
 void FormRateio::on_rateio_changed( QTableWidgetItem *item){
     QTableWidget* table = ui->rateios;
-//"UnidadeID" << "Unidade" << "RateioID" << "Valor" << "Parcelas" << "Cota" << "Vcto";
+
     for(int row=0; row<table->rowCount(); row++){
 
+        QTableWidgetItem* unidadeId = table->item(row, 0);
         QTableWidgetItem* rateioId = table->item(row, 2);
         QTableWidgetItem* valor = table->item(row, 3);
         QTableWidgetItem* parcelas = table->item(row, 4);
@@ -184,14 +191,17 @@ void FormRateio::on_rateio_changed( QTableWidgetItem *item){
         QTableWidgetItem* despesaId = table->item(row, 7);
 
         Rateio rateio;
+        rateio.setUnidade(unidadeId->text().toInt());
         rateio.setId(rateioId->text().toInt());
         rateio.setValor(valor->text().toInt());
         rateio.setParcela(parcelas->text().toInt());
         rateio.setRazao(cota->text().toFloat());
         rateio.setDespesa(despesaId->text().toInt());
 
+        qDebug() << rateio.getId() << rateio.getUnidade() << rateio.getParcela();
+
         try{
-            if(rateio.getId() > -1)
+            if(rateio.getId() <= 0)
                 DAO::incluirRateio(rateio);
             else
                 DAO::updateRateio(rateio);

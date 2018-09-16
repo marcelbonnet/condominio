@@ -39,13 +39,6 @@ CREATE TABLE IF NOT EXISTS "cobrancas" (
 	`fk_unidade`	INTEGER NOT NULL,
 	FOREIGN KEY(`fk_unidade`) REFERENCES `unidades`(`id`)
 );
-CREATE TABLE IF NOT EXISTS "unidades" (
-	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-	`numero`	TEXT NOT NULL UNIQUE,
-	`resp_financeiro`	TEXT NOT NULL,
-	`resp_financeiro_email`	TEXT NOT NULL,
-	`resp_financeiro_telefone`	TEXT
-);
 CREATE TABLE IF NOT EXISTS "grupo_despesas" (
 	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 	`grupo`	TEXT NOT NULL UNIQUE
@@ -79,3 +72,17 @@ CREATE TABLE IF NOT EXISTS "rateios" (
 	FOREIGN KEY(`fk_unidade`) REFERENCES `unidades`(`id`),
 	FOREIGN KEY(`fkDespesa`) REFERENCES `despesas`(`id`)
 );
+CREATE TABLE IF NOT EXISTS "unidades" (
+	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+	`numero`	TEXT NOT NULL UNIQUE,
+	`resp_financeiro`	TEXT NOT NULL,
+	`resp_financeiro_email`	TEXT NOT NULL UNIQUE,
+	`resp_financeiro_telefone`	TEXT,
+	`email2`	TEXT UNIQUE
+);
+CREATE VIEW view_despesas AS SELECT d.id, d.dt_evento, d.valor, d.memo, d.dt_inclusao, nd.id AS naturezaId, gd.id AS grupoId, nd.natureza, gd.grupo FROM despesas d LEFT JOIN natureza_despesas nd ON nd.id = d.fkNatureza LEFT JOIN grupo_despesas gd ON gd.id = nd.fkGrupo
+/* view_despesas(id,dt_evento,valor,memo,dt_inclusao,naturezaId,grupoId,natureza,grupo) */;
+CREATE VIEW view_rateios AS SELECT u.id AS unidadeId, u.numero, r.id AS rateioId, r.fk_unidade, r.parcela, r.razao, r.valor, r.fkDespesa, r.dt_vcto
+FROM unidades u
+LEFT OUTER JOIN rateios r ON u.id = r.fk_unidade
+/* view_rateios(unidadeId,numero,rateioId,fk_unidade,parcela,razao,valor,fkDespesa,dt_vcto) */;

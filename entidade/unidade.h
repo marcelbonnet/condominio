@@ -10,6 +10,7 @@ private:
     QString numero;
     QString nome;
     QString email;
+    QString email2;
     QString telefone;
 
 public:
@@ -49,6 +50,14 @@ public:
 
     QString getTelefone(){
         return this->telefone;
+    }
+
+    void setEmail2(QString email2){
+        this->email2 = email2;
+    }
+
+    QString getEmail2(){
+        return this->email2;
     }
 
 };

@@ -22,9 +22,11 @@ private slots:
     void on_dataFim_dateChanged(const QDate &date);
 
     //depois que um rateio for alterado na Tabela
-    void on_rateio_changed(const QTableWidgetItem * item);
+    void on_rateio_changed(QTableWidgetItem *item);
     //quando uma despesa for selecionada
     void on_despesas_itemSelectionChanged();
+
+
 
 
 

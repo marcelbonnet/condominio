@@ -2,6 +2,7 @@
 #define RATEIO_H
 
 #include <QDate>
+#include <QString>
 
 class Rateio {
 
@@ -14,8 +15,12 @@ private:
     double razao = -1;
     int despesa = -1;
 
+
 public:
     Rateio(){}
+    //para transporte de dados da view
+    int unidadeId;  //da tabela de unidade num outer join
+    QString unidadeNumero;
 
     void setId(int id){
             this->id = id;

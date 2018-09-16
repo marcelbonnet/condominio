@@ -53,7 +53,7 @@ void FormDespesa::on_btnIncluirDespesa_clicked()
     double val = ui->valor->value()*100;
     d.setValor( static_cast<int>(val) );
     d.setNota(this->nota);
-    d.setNatureza(naturezaId);
+    d.setNaturezaId(naturezaId);
 
     try {
         DAO::incluirDespesa(d);

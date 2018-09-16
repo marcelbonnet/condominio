@@ -14,8 +14,10 @@ private:
     int valor;
     QString memo;
     QString nota;
-    int natureza;
-    int grupo;
+    int naturezaId;
+    int grupoId;
+    QString natureza;
+    QString grupo;
 
 public:
     Despesa() {}
@@ -63,18 +65,32 @@ public:
         return this->nota;
     }
 
-    void setNatureza(int natureza){
+    void setNaturezaId(int naturezaId){
+            this->naturezaId = naturezaId;
+    }
+
+    int getNaturezaId(){
+            return this->naturezaId;
+    }
+    void setGrupoId(int grupoId){
+            this->grupoId = grupoId;
+    }
+
+    int getGrupoId(){
+            return this->grupoId;
+    }
+    void setNatureza(QString natureza){
             this->natureza = natureza;
     }
 
-    int getNatureza(){
+    QString getNatureza(){
             return this->natureza;
     }
-    void setGrupo(int grupo){
+    void setGrupo(QString grupo){
             this->grupo = grupo;
     }
 
-    int getGrupo(){
+    QString getGrupo(){
             return this->grupo;
     }
 

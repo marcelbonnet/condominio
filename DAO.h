@@ -37,6 +37,7 @@ public:
     static int incluirRateio(Rateio rateio) throw (std::exception);
     static void updateRateio(Rateio rateio) throw (std::exception);
     static QList<Rateio> listarRateio() throw (std::exception);
+    static QList<Rateio> listarRateioPorDespesa(int despesaId) throw (std::exception);
 
 };
 

@@ -64,13 +64,6 @@
       <item>
        <widget class="QTableWidget" name="rateios"/>
       </item>
-      <item>
-       <widget class="QPushButton" name="btnSalvarRateio">
-        <property name="text">
-         <string>Salvar</string>
-        </property>
-       </widget>
-      </item>
      </layout>
     </widget>
    </item>

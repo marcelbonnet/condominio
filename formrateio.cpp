@@ -6,6 +6,7 @@
 #include <QDate>
 #include <QMessageBox>
 #include <QDebug>
+#include <QtMath>
 
 FormRateio::FormRateio(QWidget *parent) :
     QWidget(parent),
@@ -208,7 +209,8 @@ void FormRateio::persistir(int row){
         Rateio rateio;
         rateio.setUnidade(unidadeId->text().toInt());
         rateio.setId(rateioId->text().toInt());
-        rateio.setValor( parcelas->text().toInt() == 0 ? 0 : valor->text().toInt()/parcelas->text().toInt());
+
+        rateio.setValor( parcelas->text().toInt() == 0 ? 0 :  qCeil( ((valor->text().toFloat()/1000)/parcelas->text().toFloat())*1000 ) );
         rateio.setParcela(parcelas->text().toInt());
         rateio.setRazao(cota->text().toFloat());
         rateio.setDespesa(despesaId->text().toInt());

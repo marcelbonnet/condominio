@@ -60,9 +60,16 @@
      <property name="title">
       <string>Opções de Rateio</string>
      </property>
-     <layout class="QVBoxLayout" name="verticalLayout_3">
+     <layout class="QHBoxLayout" name="horizontalLayout_2">
       <item>
        <widget class="QTableWidget" name="rateios"/>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btnAceitarValoresPadrao">
+        <property name="text">
+         <string>Aceitar Valores</string>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>

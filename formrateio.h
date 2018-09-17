@@ -30,11 +30,14 @@ private slots:
 
 
 
+    void on_btnAceitarValoresPadrao_clicked();
+
 private:
     Ui::FormRateio *ui;
 
     void atualizarDespesas(QDate de, QDate ate);
     void atualizarRateios();
+    void persistir(int row);
 };
 
 #endif // FORMRATEIO_H

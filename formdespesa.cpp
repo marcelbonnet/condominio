@@ -50,7 +50,7 @@ void FormDespesa::on_btnIncluirDespesa_clicked()
     Despesa d;
     d.setDataDespesa( ui->data->date() );
     d.setMemo(ui->memo->toPlainText());
-    double val = ui->valor->value()*100;
+    double val = ui->valor->value()*1000;
     d.setValor( static_cast<int>(val) );
     d.setNota(this->nota);
     d.setNaturezaId(naturezaId);

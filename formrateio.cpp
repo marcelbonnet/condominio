@@ -91,10 +91,10 @@ void FormRateio::atualizarRateios(){
         for(int i=0; i<lista.count(); i++){
             Rateio rateio = lista.at(i);
 
-            qDebug() << rateio.getId() << rateio.getUnidade() << rateio.getParcela() << rateio.getRazao() << rateio.getValor();
+            //qDebug() << rateio.getId() << rateio.getUnidade() << rateio.getParcela() << rateio.getRazao() << rateio.getValor();
 
             int valor = despesaValor;
-            if(rateio.getValor() > -1)
+            if(rateio.getValor() > 0)
                 valor = rateio.getValor();
 
             int parcelas = 1;
@@ -122,7 +122,6 @@ void FormRateio::atualizarRateios(){
 
             if(grupo == 3){
                 cota = (float)1/7;
-
                 float cotaAplicada = (float)cota;
 
                 //FIXME : síndico deve ser registrado numa tabela de configurações
@@ -131,19 +130,16 @@ void FormRateio::atualizarRateios(){
                     cotaAplicada = 0;
 
                 } else {
-                    if(rateio.getParcela() > -1)
+                    if(rateio.getParcela() > 0)
                         parcelas = rateio.getParcela();
-                    if(rateio.getRazao() > -1)
+                    if(rateio.getRazao() > 0)
                         cotaAplicada = rateio.getRazao();
+
                 }
-
-
 
                 table->setItem(i,4, new QTableWidgetItem( QString::number(parcelas) ));
                 table->setItem(i,5, new QTableWidgetItem( QString::number(cotaAplicada) ));
-            }
-
-            if(grupo == 2){
+            } else if(grupo == 2){
                 cota = 0;
 
                 float cotaAplicada = cota;
@@ -154,18 +150,30 @@ void FormRateio::atualizarRateios(){
                         || rateio.unidadeNumero.compare("32") == 0
                         || rateio.unidadeNumero.compare("42") == 0
                 ){
-                    if(rateio.getParcela() > -1)
+                    if(rateio.getParcela() > 0)
                         parcelas = rateio.getParcela();
 
                     cotaAplicada = (float)1/4;
 
                 }
 
-                if(rateio.getRazao() > -1)
+                if(rateio.getRazao() > 0)
                     cotaAplicada = rateio.getRazao();
 
                 table->setItem(i,4, new QTableWidgetItem( QString::number(parcelas) ));
                 table->setItem(i,5, new QTableWidgetItem( QString::number(cotaAplicada) ));
+            } else if (grupo == 1){
+                cota = (float)1/8;
+                float cotaAplicada = (float)cota;
+
+                if(rateio.getParcela() > 0)
+                    parcelas = rateio.getParcela();
+                if(rateio.getRazao() > 0)
+                    cotaAplicada = rateio.getRazao();
+
+                table->setItem(i,4, new QTableWidgetItem( QString::number(parcelas) ));
+                table->setItem(i,5, new QTableWidgetItem( QString::number(cotaAplicada) ));
+
             }
 
 
@@ -198,7 +206,7 @@ void FormRateio::on_rateio_changed( QTableWidgetItem *item){
         rateio.setRazao(cota->text().toFloat());
         rateio.setDespesa(despesaId->text().toInt());
 
-        qDebug() << rateio.getId() << rateio.getUnidade() << rateio.getParcela();
+
 
         try{
             if(rateio.getId() <= 0)

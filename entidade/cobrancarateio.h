@@ -1,0 +1,4 @@
+#ifndef COBRANCARATEIO_H
+#define COBRANCARATEIO_H
+
+#endif // COBRANCARATEIO_H

@@ -26,9 +26,16 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->tabWidget->addTab(frmNaturezaDespesa, "Natureza Despesa");
     ui->tabWidget->addTab(frmGrupoDespesa, "Grupo Despesa");
     ui->tabWidget->addTab(frmRateio, "Rateio");
+
+    //recebe sinal para mostrar mensagens na status bar
+    connect(frmRateio, SIGNAL(emitirMensagem(QString)), this, SLOT(onReceberMensagem(QString)));
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::onReceberMensagem(QString msg){
+    statusBar()->showMessage(msg, 7000);
 }

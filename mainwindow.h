@@ -17,6 +17,9 @@ public:
 
 private:
     Ui::MainWindow *ui;
+
+private slots:
+    void onReceberMensagem(QString msg);
 };
 
 #endif // MAINWINDOW_H

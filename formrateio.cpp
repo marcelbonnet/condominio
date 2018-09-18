@@ -222,8 +222,17 @@ void FormRateio::persistir(int row){
                     rateio.setDataVencimento(dataVencimento.addMonths(i-1));
                     DAO::incluirRateio(rateio);
                 }
-            } else
+            } else{
+                //vai repetir esse pop up diversas vezes
+                if(rateio.getParcela() > 1){
+//                    QMessageBox::warning(this, "Erro", "FIXME: update de uma para mais parcelas: procurar demais parcelas, se houver, remover e recriar? de 1 para mais: atualizar e incluir restantes ..." );
+                    //cuidado: atualizar: o valor não pode ser dividido novamente pela parcela!
+                    emit emitirMensagem("FIXME: update de uma para mais parcelas: procurar demais parcelas, se houver, remover e recriar? de 1 para mais: atualizar e incluir restantes ...");
+                    return;
+                }
+
                 DAO::updateRateio(rateio);
+            }
         } catch (std::exception &e) {
             QMessageBox::warning(this, "Erro", e.what() );
         }

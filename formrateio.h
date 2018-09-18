@@ -25,12 +25,10 @@ private slots:
     void on_rateio_changed(QTableWidgetItem *item);
     //quando uma despesa for selecionada
     void on_despesas_itemSelectionChanged();
-
-
-
-
-
     void on_btnAceitarValoresPadrao_clicked();
+
+signals:
+    void emitirMensagem(QString);
 
 private:
     Ui::FormRateio *ui;

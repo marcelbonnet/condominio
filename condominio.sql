@@ -32,13 +32,6 @@ CREATE TABLE IF NOT EXISTS "assinaturas" (
 	FOREIGN KEY(`fk_livro_ata`) REFERENCES `livro_atas`(`id`),
 	FOREIGN KEY(`fk_livro_ocorrencias`) REFERENCES livro_ocorrencias('id')
 );
-CREATE TABLE IF NOT EXISTS "cobrancas" (
-	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-	`dt_vcto`	DATE NOT NULL,
-	`valor`	INTEGER NOT NULL,
-	`fk_unidade`	INTEGER NOT NULL,
-	FOREIGN KEY(`fk_unidade`) REFERENCES `unidades`(`id`)
-);
 CREATE TABLE IF NOT EXISTS "grupo_despesas" (
 	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 	`grupo`	TEXT NOT NULL UNIQUE
@@ -86,3 +79,20 @@ CREATE VIEW view_rateios AS SELECT u.id AS unidadeId, u.numero, r.id AS rateioId
 FROM unidades u
 LEFT OUTER JOIN rateios r ON u.id = r.fk_unidade
 /* view_rateios(unidadeId,numero,rateioId,fk_unidade,parcela,razao,valor,fkDespesa,dt_vcto) */;
+CREATE TABLE IF NOT EXISTS "cobrancas_rateios" (
+	`fkCobranca`	INTEGER NOT NULL,
+	`fkRateio`	INTEGER NOT NULL,
+	FOREIGN KEY(`fkCobranca`) REFERENCES `cobrancas`(`id`),
+	FOREIGN KEY(`fkRateio`) REFERENCES `rateios`(`id`)
+);
+CREATE UNIQUE INDEX `uniqueindex_cobrancas_rateios` ON `cobrancas_rateios` (`fkCobranca` ,`fkRateio` )
+;
+CREATE TABLE IF NOT EXISTS "cobrancas" (
+	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+	`dt_vcto`	DATE NOT NULL,
+	`valor`	INTEGER NOT NULL,
+	`fk_unidade`	INTEGER NOT NULL,
+	`dt_pgto`	INTEGER,
+	`valor_pgto`	INTEGER,
+	FOREIGN KEY(`fk_unidade`) REFERENCES `unidades`(`id`)
+);

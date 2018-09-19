@@ -369,32 +369,6 @@ void DAO::gerarCobrancasComVencimentoEm(int ano, int mes, int dia) throw (std::e
         query.bind(2, mes);
         query.bind(3, unidadeId);
         query.exec();
-        /*
-        while(query.executeStep()){
-
-            SQLite::Statement qCobranca(db, "INSERT INTO cobrancas(dt_vcto, valor, fk_unidade) VALUES (?, ?, ?)");
-            QString dataVcto = QString("%1-%2-%3").arg(ano).arg(mes).arg(dia);
-            int valor = query.getColumn(2);
-            int rateioId = query.getColumn(0);
-
-            qCobranca.bind(1, dataVcto.toUtf8().data());
-            qCobranca.bind(2, valor );
-            qCobranca.bind(3, unidadeId );
-            qCobranca.exec();
-
-            SQLite::Statement qlastid(db, "SELECT MAX(id) from cobrancas");
-            int cobrancaId = 0;
-            while(query.executeStep())
-                cobrancaId = qlastid.getColumn(0); //DAO::getLastInsertRowId();
-
-    qDebug() << "cobrancaId" << cobrancaId << "valor" << valor << "fk unidade" << unidadeId;
-            SQLite::Statement qCobrancaRateio(db, "INSERT INTO cobrancas_rateios(fkCobranca, fkRateio) VALUES(?, ?) ");
-            qCobrancaRateio.bind(1, cobrancaId);
-            qCobrancaRateio.bind(2, rateioId);
-            //qCobrancaRateio.exec();
-
-        }
-        */
     }
 
 }

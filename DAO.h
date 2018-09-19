@@ -38,6 +38,9 @@ public:
     static void updateRateio(Rateio rateio) throw (std::exception);
     static QList<Rateio> listarRateio() throw (std::exception);
     static QList<Rateio> listarRateioPorDespesa(int despesaId) throw (std::exception);
+    static QList<Rateio> listarRateioPorMesVencimento(int ano, int mes) throw (std::exception);
+
+    static void gerarCobrancasComVencimentoEm(int ano, int mes, int dia) throw (std::exception);
 
 };
 

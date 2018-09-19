@@ -28,7 +28,14 @@
        </widget>
       </item>
       <item>
-       <widget class="QDateEdit" name="dataIni"/>
+       <widget class="QDateEdit" name="dataIni">
+        <property name="displayFormat">
+         <string>ddd, dd/MM/yyyy</string>
+        </property>
+        <property name="calendarPopup">
+         <bool>true</bool>
+        </property>
+       </widget>
       </item>
       <item>
        <widget class="QLabel" name="label_2">
@@ -38,7 +45,14 @@
        </widget>
       </item>
       <item>
-       <widget class="QDateEdit" name="dataFim"/>
+       <widget class="QDateEdit" name="dataFim">
+        <property name="displayFormat">
+         <string>ddd, dd/MM/yyyy</string>
+        </property>
+        <property name="calendarPopup">
+         <bool>true</bool>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>
@@ -65,10 +79,29 @@
        <widget class="QTableWidget" name="rateios"/>
       </item>
       <item>
-       <widget class="QPushButton" name="btnAceitarValoresPadrao">
-        <property name="text">
-         <string>Aceitar Valores</string>
+       <widget class="QGroupBox" name="groupBox_4">
+        <property name="title">
+         <string>GroupBox</string>
         </property>
+        <layout class="QVBoxLayout" name="verticalLayout_3">
+         <item>
+          <widget class="QDateEdit" name="dataRateioVcto">
+           <property name="displayFormat">
+            <string>ddd, dd/MM/yyyy</string>
+           </property>
+           <property name="calendarPopup">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="btnAceitarValoresPadrao">
+           <property name="text">
+            <string>Aceitar Valores</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </widget>
       </item>
      </layout>

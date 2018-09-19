@@ -34,6 +34,7 @@ FormRateio::~FormRateio()
 
 void FormRateio::on_dataIni_dateChanged(const QDate &date)
 {
+    ui->dataRateioVcto->setDate(date.addDays(15));
     atualizarDespesas(ui->dataIni->date(), ui->dataFim->date());
 }
 
@@ -97,7 +98,8 @@ void FormRateio::atualizarRateios(){
             int valor = despesaValor;
             QString dataVcto = rateio.getDataVencimento().toString("dd/MM/yyyy");
             if(dataVcto.length() == 0)
-                dataVcto = ui->dataIni->date().addDays(15).addMonths(1).toString("dd/MM/yyyy");
+                dataVcto = ui->dataRateioVcto->date().toString("dd/MM/yyyy"); // ui->dataIni->date().addDays(15).addMonths(1).toString("dd/MM/yyyy");
+
             int parcelas = 1;
             int grupo = tableDespesas->item(tableDespesas->currentRow(), 7)->text().toInt();
             /*

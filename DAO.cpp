@@ -326,3 +326,75 @@ QList<Rateio> DAO::listarRateioPorDespesa(int despesaId) throw (std::exception){
     }
     return rs;
 }
+
+QList<Rateio> DAO::listarRateioPorMesVencimento(int ano, int mes)  throw (std::exception){
+    SQLite::Database db(getDbPath().toUtf8().data());
+    SQLite::Statement   query(db, "SELECT r.id, r.fk_unidade, r.valor, r.parcela, r.dt_vcto, r.razao, r.fkDespesa FROM rateios r JOIN despesas d ON r.fkDespesa=d.id WHERE strftime('%Y', r.dt_vcto) = ? AND strftime('%m', r.dt_vcto) = ?  ");
+    query.bind(1, ano);
+    query.bind(2, mes);
+    QList<Rateio> rs;
+    while (query.executeStep())
+    {
+        int rateioId       = query.getColumn(0);
+        int unidadeId      = query.getColumn(1);
+        int rateioValor    = query.getColumn(2);
+        int parcelas     = query.getColumn(3);
+        const char* vcto= query.getColumn(4);
+        double razao    = query.getColumn(5);
+        int despesaId   = query.getColumn(6);
+
+        Rateio rateio;
+        rateio.setId(rateioId);
+        rateio.setUnidade(unidadeId);
+        rateio.setParcela(parcelas);
+        rateio.setValor(rateioValor);
+        rateio.setRazao((float)razao);
+        rateio.setDataVencimento(QDate().fromString(vcto, "yyyy-MM-dd") );
+        rateio.setDespesa(despesaId);
+        rs.append(rateio);
+    }
+    return rs;
+}
+
+void DAO::gerarCobrancasComVencimentoEm(int ano, int mes, int dia) throw (std::exception){
+    SQLite::Database db(getDbPath().toUtf8().data(), SQLite::OPEN_READWRITE);
+
+    QList<Unidade> unidades = listarUnidades();
+    for(int i=0; i<unidades.count(); i++){
+        Unidade u = unidades.at(i);
+        int unidadeId = u.getId();
+        SQLite::Statement   query(db, "INSERT INTO cobrancas(fk_unidade, valor, dt_vcto) SELECT unidade, valor, dt_vcto FROM (SELECT r.id, r.fk_unidade AS unidade, SUM(r.valor) AS valor, dt_vcto FROM rateios r JOIN despesas d ON r.fkDespesa=d.id WHERE cast( strftime('%Y', r.dt_vcto) as real ) = ? AND cast(strftime('%m', r.dt_vcto) as real) = ? AND r.fk_unidade = ? )");
+
+        query.bind(1, ano);
+        query.bind(2, mes);
+        query.bind(3, unidadeId);
+        query.exec();
+        /*
+        while(query.executeStep()){
+
+            SQLite::Statement qCobranca(db, "INSERT INTO cobrancas(dt_vcto, valor, fk_unidade) VALUES (?, ?, ?)");
+            QString dataVcto = QString("%1-%2-%3").arg(ano).arg(mes).arg(dia);
+            int valor = query.getColumn(2);
+            int rateioId = query.getColumn(0);
+
+            qCobranca.bind(1, dataVcto.toUtf8().data());
+            qCobranca.bind(2, valor );
+            qCobranca.bind(3, unidadeId );
+            qCobranca.exec();
+
+            SQLite::Statement qlastid(db, "SELECT MAX(id) from cobrancas");
+            int cobrancaId = 0;
+            while(query.executeStep())
+                cobrancaId = qlastid.getColumn(0); //DAO::getLastInsertRowId();
+
+    qDebug() << "cobrancaId" << cobrancaId << "valor" << valor << "fk unidade" << unidadeId;
+            SQLite::Statement qCobrancaRateio(db, "INSERT INTO cobrancas_rateios(fkCobranca, fkRateio) VALUES(?, ?) ");
+            qCobrancaRateio.bind(1, cobrancaId);
+            qCobrancaRateio.bind(2, rateioId);
+            //qCobrancaRateio.exec();
+
+        }
+        */
+    }
+
+}

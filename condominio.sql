@@ -89,14 +89,5 @@ CREATE TABLE IF NOT EXISTS "cobrancas" (
 	FOREIGN KEY(`fk_unidade`) REFERENCES `unidades`(`id`)
 );
 CREATE UNIQUE INDEX `uniqueindex_cobrancas` ON `cobrancas` (`dt_vcto` ,`fk_unidade` );
-CREATE VIEW view_cobrancas_rateios AS SELECT r.valor AS rateioValor, r.parcela AS num_parcelas, r.dt_vcto AS rateioVcto, r.razao AS rateioRazao,
- u.id AS unidadeId, 
-u.numero AS unidadeNumero, d.dt_evento AS despesaData, d.valor AS despesaValor,
-nd.id AS naturezaId, nd.natureza AS naturezaNome,
-gd.id AS grupoId, gd.grupo AS grupoNome, d.memo AS despesaMemo
-FROM rateios r
-JOIN despesas d ON d.id=r.fkDespesa
-JOIN unidades u ON u.id=fk_unidade
-JOIN natureza_despesas nd ON d.fkNatureza = nd.id
-JOIN grupo_despesas gd ON gd.id = nd.fkGrupo
-/* view_cobrancas_rateios(rateioValor,num_parcelas,rateioVcto,rateioRazao,unidadeId,unidadeNumero,despesaData,despesaValor,naturezaId,naturezaNome,grupoId,grupoNome,despesaMemo) */;
+CREATE VIEW view_cobrancas_rateios AS SELECT ((d.valor/r.parcela) * r.razao) AS valorExato, r.valor AS rateioValor, r.parcela AS num_parcelas, r.dt_vcto AS rateioVcto, r.razao AS rateioRazao, u.id AS unidadeId, u.numero AS unidadeNumero, d.dt_evento AS despesaData, d.valor AS despesaValor, nd.id AS naturezaId, nd.natureza AS naturezaNome, gd.id AS grupoId, gd.grupo AS grupoNome, d.memo AS despesaMemo FROM rateios r JOIN despesas d ON d.id=r.fkDespesa JOIN unidades u ON u.id=fk_unidade JOIN natureza_despesas nd ON d.fkNatureza = nd.id JOIN grupo_despesas gd ON gd.id = nd.fkGrupo
+/* view_cobrancas_rateios(valorExato,rateioValor,num_parcelas,rateioVcto,rateioRazao,unidadeId,unidadeNumero,despesaData,despesaValor,naturezaId,naturezaNome,grupoId,grupoNome,despesaMemo) */;
